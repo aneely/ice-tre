@@ -1,7 +1,6 @@
 require 'sinatra'
 require 'json'
-# for pretty debugging output
-require 'pp'
+require 'pp' # for pretty debugging output
 require 'mini_magick'
 require 'pry'
 
