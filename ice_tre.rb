@@ -14,6 +14,14 @@ helpers do
     match.to_s.length > 0
   end
 
+  def assign_rapper_jpg(rapper)
+    begin
+      MiniMagick::Image.open("image/#{rapper}_white_bg.jpg")
+    rescue
+      false
+    end
+  end
+
   def assign_transparent_rapper_png(rapper)
     begin
       MiniMagick::Image.open("image/#{rapper}_transp.png")
@@ -71,7 +79,52 @@ get '/rapper/vanilla_ice/width/:width/height/:height' do
   end
 end
 
-get '/rapper/:rapper/width/:width/height/:height/color/:color' do
+get '/rapper/:rapper/width/:width/height/:height' do
+  image = assign_rapper_jpg(params[:rapper])
+  width = "#{params[:width]}".to_i
+  height = "#{params[:height]}".to_i
+  color = '#FFFFFF'
+
+  if image and valid_width_and_height?(height, width)
+    resize_and_pad_with_color(image, width, height, color)
+    content_type 'image/jpg'
+    image.to_blob
+  else
+    redirect('/vanilla_ice')
+  end
+end
+
+get '/rapper/:rapper/w/:width/h/:height' do
+  image = assign_rapper_jpg(params[:rapper])
+  width = "#{params[:width]}".to_i
+  height = "#{params[:height]}".to_i
+  color = '#FFFFFF'
+
+  if image and valid_width_and_height?(height, width)
+    resize_and_pad_with_color(image, width, height, color)
+    content_type 'image/jpg'
+    image.to_blob
+  else
+    redirect('/vanilla_ice')
+  end
+end
+
+get '/rapper/:rapper/width/:width/height/:height/background_color/:color' do
+  image  =  assign_transparent_rapper_png(params[:rapper])
+  width  =  "#{params[:width]}".to_i
+  height =  "#{params[:height]}".to_i
+  color  = "##{params[:color]}"
+
+  if image and valid_width_and_height?(height, width) and valid_hex_color?(color)
+    resize_and_pad_with_color(image, width, height, color)
+    content_type 'image/jpg'
+    image.to_blob
+  else
+    redirect('/vanilla_ice')
+  end
+end
+
+get '/rapper/:rapper/w/:width/h/:height/bg/:color' do
   image  =  assign_transparent_rapper_png(params[:rapper])
   width  =  "#{params[:width]}".to_i
   height =  "#{params[:height]}".to_i
