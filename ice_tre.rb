@@ -4,6 +4,15 @@ require 'pp' # for pretty debugging output
 require 'mini_magick'
 require 'pry'
 
+configure do
+  images = {
+      'vanilla_ice' => MiniMagick::Image.open('image/vanilla_ice_transp.png'),
+      'ice_cube' => MiniMagick::Image.open('image/ice_cube_transp.png'),
+      'ice_t' => MiniMagick::Image.open('image/ice_t_transp.png'),
+  }
+  set :images, images
+end
+
 helpers do
   def valid_width_and_height?(height, width)
     width > 0 && height > 0
@@ -24,7 +33,8 @@ helpers do
 
   def assign_transparent_rapper_png(rapper)
     begin
-      MiniMagick::Image.open("image/#{rapper}_transp.png")
+      # MiniMagick::Image.open("image/#{rapper}_transp.png")
+      settings.images[rapper]
     rescue
       false
     end
@@ -80,7 +90,7 @@ get '/rapper/vanilla_ice/width/:width/height/:height' do
 end
 
 get '/rapper/:rapper/width/:width/height/:height' do
-  image = assign_rapper_jpg(params[:rapper])
+  image = assign_rapper_jpg("#{params[:rapper]}")
   width = "#{params[:width]}".to_i
   height = "#{params[:height]}".to_i
   color = '#FFFFFF'
@@ -95,7 +105,7 @@ get '/rapper/:rapper/width/:width/height/:height' do
 end
 
 get '/rapper/:rapper/w/:width/h/:height' do
-  image = assign_rapper_jpg(params[:rapper])
+  image = assign_rapper_jpg("#{params[:rapper]}")
   width = "#{params[:width]}".to_i
   height = "#{params[:height]}".to_i
   color = '#FFFFFF'
