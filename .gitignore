@@ -3,3 +3,7 @@
 
 # OS X file system metadata
 .DS_Store
+
+# machine specific gems from bundler
+.bundle
+
