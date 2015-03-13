@@ -140,6 +140,7 @@ get '/rapper/:rapper/w/:width/h/:height/bg/:color' do
 end
 
 # route methods for undefined API requests
+
 not_found do
   error 400
 end
