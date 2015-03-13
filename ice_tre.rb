@@ -5,8 +5,12 @@ require 'mini_magick'
 require 'pry'
 
 helpers do
-  def valid_width_and_height?(height, width)
+  def valid_width_and_height?(width, height)
     width > 0 && height > 0
+  end
+
+  def valid_dimension?(value)
+    value > 0
   end
 
   def valid_hex_color?(color)
@@ -14,23 +18,47 @@ helpers do
     match.to_s.length > 0
   end
 
-  def assign_rapper_jpg(rapper)
-    begin
-      MiniMagick::Image.open("image/#{rapper}_white_bg.jpg")
-    rescue
+  def valid_non_zero_percentage?(percentage)
+    percentage > 0
+  end
+
+  def assign_rapper_image(rapper, default)
+    image_file = "image/#{rapper}.png"
+
+    if File.file?(image_file)
+      MiniMagick::Image.open(image_file)
+    else
+      MiniMagick::Image.open("image/#{default}.png")
+    end
+  end
+
+  def assign_dimension(value, default)
+    sanitized_dimension = value.to_i
+    if valid_dimension?(sanitized_dimension)
+      sanitized_dimension
+    else
+      default
+    end
+  end
+
+  def assign_color(color, default)
+    if valid_hex_color?("##{color}")
+      "##{color}"
+    else
+      "##{default}"
+    end
+  end
+
+  def assign_percent(percent)
+    if valid_non_zero_percentage?(percent.to_i)
+      percent.to_i
+    else
       false
     end
   end
 
-  def assign_transparent_rapper_png(rapper)
-    begin
-      MiniMagick::Image.open("image/#{rapper}_transp.png")
-    rescue
-      false
-    end
-  end
-
-  def resize_and_pad_with_color(image, width, height, color)
+  def format_image(image, width, height, color)
+    puts 'inside format_image'
     image.combine_options do |img|
       img.thumbnail("#{width}x#{height}>")
       img.background(color)
@@ -40,102 +68,34 @@ helpers do
   end
 end
 
-# trying to test if mini_magick is installed correctly
-get '/vanilla_ice' do
-  image = MiniMagick::Image.open('image/vanilla_ice_white_bg.jpg')
-  content_type 'image/jpg'
-  image.to_blob
+get '/help/?' do
+  status 200
+  help_string = '<html><body>' +
+                '<p>The URL parameters are constructed as /rapper/width/height/color/percent/</p>' +
+                '<p> - the options for rapper are ice_cube, ice_t, and vanilla_ice</p>' +
+                '<p> - the options for width and height include any valid positive integer below 2560</p>' +
+                '<p> - the options for color include any valid hex web color without the pound sign in front of it</p>' +
+                '<p> - the options for percent include any positive integers up to 300</p>' +
+                '<p>An example of a valid URL is /vanilla_ice/1024/768/ffffff/</p>' +
+                '<p>Note: the trailing slash is optional</p>' +
+                '</html></body>'
+  return help_string
 end
 
-get '/rapper/vanilla_ice/:percentage/percent' do
-  percentage = "#{params[:percentage]}".to_i
-  if percentage > 0
-    image = MiniMagick::Image.open('image/vanilla_ice_white_bg.jpg')
-    image.sample("#{percentage}%")
-    content_type 'image/jpg'
-    image.to_blob
-  else
-    redirect('/vanilla_ice')
-  end
-end
-
-get '/rapper/vanilla_ice/width/:width/height/:height' do
-  width = "#{params[:width]}".to_i
-  height = "#{params[:height]}".to_i
-  color = '#FFFFFF'
-
-  if valid_width_and_height?(height, width)
-    image = MiniMagick::Image.open('image/vanilla_ice_white_bg.jpg')
-    image.combine_options do |img|
-      img.thumbnail("#{width}x#{height}>")
-      img.background(color)
-      img.gravity('South')
-      img.extent("#{width}x#{height}")
-    end
-    content_type 'image/jpg'
-    image.to_blob
-  else
-    redirect('/vanilla_ice')
-  end
-end
-
-get '/rapper/:rapper/width/:width/height/:height' do
-  image = assign_rapper_jpg("#{params[:rapper]}")
-  width = "#{params[:width]}".to_i
-  height = "#{params[:height]}".to_i
-  color = '#FFFFFF'
-
-  if image and valid_width_and_height?(height, width)
-    resize_and_pad_with_color(image, width, height, color)
-    content_type 'image/jpg'
-    image.to_blob
-  else
-    redirect('/vanilla_ice')
-  end
-end
-
-get '/rapper/:rapper/w/:width/h/:height' do
-  image = assign_rapper_jpg("#{params[:rapper]}")
-  width = "#{params[:width]}".to_i
-  height = "#{params[:height]}".to_i
-  color = '#FFFFFF'
-
-  if image and valid_width_and_height?(height, width)
-    resize_and_pad_with_color(image, width, height, color)
-    content_type 'image/jpg'
-    image.to_blob
-  else
-    redirect('/vanilla_ice')
-  end
-end
-
-get '/rapper/:rapper/width/:width/height/:height/background_color/:color' do
-  image  =  assign_transparent_rapper_png("#{params[:rapper]}")
-  width  =  "#{params[:width]}".to_i
-  height =  "#{params[:height]}".to_i
-  color  = "##{params[:color]}"
+get '/?:rapper?/?:width?/?:height?/?:color?/?:percent?/?' do
+  image   = assign_rapper_image("#{params[:rapper]}", 'vanilla_ice')
+  width   = assign_dimension("#{params[:width]}", 1024)
+  height  = assign_dimension("#{params[:height]}", 768)
+  color   = assign_color("#{params[:color]}", 'ffffff')
+  percent = assign_percent("#{params[:percent]}")
 
   if image and valid_width_and_height?(height, width) and valid_hex_color?(color)
-    resize_and_pad_with_color(image, width, height, color)
+    format_image(image, width, height, color)
     content_type 'image/jpg'
+    image.sample("#{percent}%") if percent
     image.to_blob
   else
-    redirect('/vanilla_ice')
-  end
-end
-
-get '/rapper/:rapper/w/:width/h/:height/bg/:color' do
-  image  =  assign_transparent_rapper_png("#{params[:rapper]}")
-  width  =  "#{params[:width]}".to_i
-  height =  "#{params[:height]}".to_i
-  color  = "##{params[:color]}"
-
-  if image and valid_width_and_height?(height, width) and valid_hex_color?(color)
-    resize_and_pad_with_color(image, width, height, color)
-    content_type 'image/jpg'
-    image.to_blob
-  else
-    redirect('/vanilla_ice')
+    redirect('/vanilla_ice/1024/768/ffffff/')
   end
 end
 
