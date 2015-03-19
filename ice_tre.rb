@@ -57,8 +57,18 @@ helpers do
     end
   end
 
-  def format_image(image, width, height, color)
-    puts 'inside format_image'
+  def dimension_for_percent(dimension, percent)
+    if percent == 100
+      dimension
+    else
+      (dimension * (percent / 100.0)).to_i
+    end
+  end
+
+  def format_image(image, width, height, color, percent)
+    width = dimension_for_percent(width, percent)
+    height = dimension_for_percent(height, percent)
+
     image.combine_options do |img|
       img.thumbnail("#{width}x#{height}>")
       img.background(color)
@@ -87,12 +97,12 @@ get '/?:rapper?/?:width?/?:height?/?:color?/?:percent?/?' do
   width   = assign_dimension("#{params[:width]}", 1024)
   height  = assign_dimension("#{params[:height]}", 768)
   color   = assign_color("#{params[:color]}", 'ffffff')
-  percent = assign_percent("#{params[:percent]}")
+  percent = assign_percent("#{params[:percent]}") || 100
 
   if image and valid_width_and_height?(height, width) and valid_hex_color?(color)
-    format_image(image, width, height, color)
+    format_image(image, width, height, color, percent)
+    # image.sample("#{percent}%") if percent # replaced by the percent parameter above
     content_type 'image/jpg'
-    image.sample("#{percent}%") if percent
     image.to_blob
   else
     redirect('/vanilla_ice/1024/768/ffffff/')
