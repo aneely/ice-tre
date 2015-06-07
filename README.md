@@ -25,6 +25,8 @@ The URL parameters are constructed as /rapper/width/height/color/percent/
 * An example of a valid URL is /vanilla_ice/1024/768/ffffff/
 * Note: the trailing slash is optional
 
+If you want to add more images, just drop a .png file with transparency into the images folder. Then use it in the URL arguments.
+
 ### Contribution guidelines ###
 
 * clone it
