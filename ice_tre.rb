@@ -75,6 +75,9 @@ helpers do
       img.gravity('South')
       img.extent("#{width}x#{height}")
     end
+
+    image.format('jpg')
+    image.quality(90)
   end
 end
 
