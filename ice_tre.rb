@@ -82,17 +82,7 @@ helpers do
 end
 
 get '/help/?' do
-  status 200
-  help_string = '<html><body>' +
-                '<p>The URL parameters are constructed as /rapper/width/height/color/percent/</p>' +
-                '<p> - the options for rapper are ice_cube, ice_t, and vanilla_ice</p>' +
-                '<p> - the options for width and height include any valid positive integer below 2560</p>' +
-                '<p> - the options for color include any valid hex web color without the pound sign in front of it</p>' +
-                '<p> - the options for percent include any positive integers up to 300</p>' +
-                '<p>An example of a valid URL is /vanilla_ice/1024/768/ffffff/</p>' +
-                '<p>Note: the trailing slash is optional</p>' +
-                '</html></body>'
-  return help_string
+  erb :help
 end
 
 get '/?:rapper?/?:width?/?:height?/?:color?/?:percent?/?' do
