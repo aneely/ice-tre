@@ -46,16 +46,41 @@
       <p>The URL parameters are parsed in order to customize your image as follows:</p>
       <p><strong>/:image/:width/:height/:color/:scale/</strong></p>
       <dl>
-        <dt>Image</dt><dd>The options for images are <code>ice_cube</code>, <code>ice_t</code>, and <code>vanilla_ice</code>; the default is <code>vanilla_ice</code></dd>
-        <dt>Width & Height</dt><dd>The options for width and height in pixels include any positive integer between <code>16</code> and <code>2560</code>; the default dimensions are <code>1024</code> and <code>768</code></dd>
-        <dt>Color</dt><dd>The options for color include any valid hex web color without the pound sign in front of it; <code>ffffff</code> is the default</dd>
-        <dt>Scale</dt><dd>The options for percent include any positive integer from <code>25</code> to <code>300</code>; the default is <code>100</code></dd>
+        <dt>Image</dt>
+        <dd>
+          The options for images are:
+          <ul>
+            <% if @image_select_hash %>
+              <% @image_select_hash.each do |file, name| %>
+                <li><code><%= file %></code></li>
+              <% end %>
+            <% end %>
+            <!--<code>ice_cube</code>, <code>ice_t</code>, and <code>vanilla_ice</code>;-->
+          </ul>
+          The default is <code>vanilla_ice</code>
+        </dd>
+        <dt>Width & Height</dt>
+        <dd>
+          The options for width and height in pixels include any positive
+          integer between <code>16</code> and <code>2560</code>; the default
+          dimensions are <code>1024</code> and <code>768</code>
+        </dd>
+        <dt>Color</dt>
+        <dd>
+          The options for color include any valid hex web color without the
+          pound sign in front of it; <code>ffffff</code> is the default
+        </dd>
+        <dt>Scale</dt>
+        <dd>
+          The options for percent include any positive integer from
+          <code>25</code> to <code>300</code>; the default is <code>100</code>
+        </dd>
       </dl>
     </div>
     <div class="panel-footer">
       Note:
       <ul>
-        <li>parameters can be optionally from last to first</li>
+        <li>parameters can be optionally omitted from last to first</li>
         <li>any omitted values will assume their defaults</li>
         <li>the trailing slash at the end of the URL is optional</li>
       </ul>
