@@ -7,9 +7,11 @@
         <div class="form-group">
           <label for="imageInput">Image</label>
           <select class="form-control" id="imageInput" name="image_input">
-            <option value="vanilla_ice">Vanilla Ice</option>
-            <option value="ice_cube">Ice Cube</option>
-            <option value="ice_t">Ice T</option>
+            <% if @image_select_hash %>
+              <% @image_select_hash.each do |file, name| %>
+                <option value="<%= file %>"><%= name %></option>
+              <% end %>
+            <% end %>
           </select>
         </div>
         <div class="form-group">

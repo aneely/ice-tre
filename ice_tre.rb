@@ -34,6 +34,7 @@ helpers do
 
   def assign_dimension(value, default)
     sanitized_dimension = value.to_i
+
     if valid_dimension?(sanitized_dimension)
       sanitized_dimension
     else
@@ -79,9 +80,26 @@ helpers do
     image.format('jpg')
     image.quality(90)
   end
+
+  def options_for_image_select
+    select_hash = {}
+
+    file_paths = Dir['image/*']
+    image_names = file_paths.each { |file| file.gsub!('image/', '').gsub!('.png', '') }
+
+    image_names.each do |file|
+      select_hash[file] = file.split('_').map { |name| name.capitalize }.join(' ')
+    end
+
+    select_hash
+  end
 end
 
+# defined route methods
+
 get '/help/?' do
+  @image_select_hash = options_for_image_select
+
   erb :help
 end
 
