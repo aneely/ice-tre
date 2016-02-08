@@ -85,6 +85,20 @@ get '/help/?' do
   erb :help
 end
 
+post '/image' do
+  image   = params[:image_input]
+  width   = params[:width_input]
+  height  = params[:height_input]
+  color   = params[:color_input]
+  percent = params[:percent_input]
+
+  unless color.nil?
+    color.gsub!('#','').downcase!
+  end
+
+  redirect("/#{image}/#{width}/#{height}/#{color}/#{percent}/")
+end
+
 get '/?:rapper?/?:width?/?:height?/?:color?/?:percent?/?' do
   image   = assign_rapper_image("#{params[:rapper]}", 'vanilla_ice')
   width   = assign_dimension("#{params[:width]}", 1024)
@@ -94,8 +108,8 @@ get '/?:rapper?/?:width?/?:height?/?:color?/?:percent?/?' do
 
   if image and valid_width_and_height?(height, width) and valid_hex_color?(color)
     format_image(image, width, height, color, percent)
-    # image.sample("#{percent}%") if percent # replaced by the percent parameter above
     content_type 'image/jpg'
+
     image.to_blob
   else
     redirect('/vanilla_ice/1024/768/ffffff/')

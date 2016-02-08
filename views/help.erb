@@ -3,10 +3,10 @@
   <div class="panel panel-default">
     <div class="panel-body">
       <p>Alternately, you can also use this convenient form to set the options and return a picture:</p>
-      <form>
+      <form action="/image" method="post">
         <div class="form-group">
           <label for="imageInput">Image</label>
-          <select class="form-control" id="imageInput" name="imageInput">
+          <select class="form-control" id="imageInput" name="image_input">
             <option value="vanilla_ice">Vanilla Ice</option>
             <option value="ice_cube">Ice Cube</option>
             <option value="ice_t">Ice T</option>
@@ -14,19 +14,19 @@
         </div>
         <div class="form-group">
           <label for="widthInput">Width in Pixels</label>
-          <input type="number" class="form-control" id="widthInput" name="widthInput" value="1024" min="16" max="2560">
+          <input type="number" class="form-control" id="widthInput" name="width_input" value="1024" min="16" max="2560">
         </div>
         <div class="form-group">
           <label for="heightInput">Height in Pixels</label>
-          <input type="number" class="form-control" id="heightInput" name="heightInput" value="768" min="16" max="2560">
+          <input type="number" class="form-control" id="heightInput" name="height_input" value="768" min="16" max="2560">
         </div>
         <div class="form-group">
           <label for="colorInput">Background Color</label>
-          <input type="text" class="form-control color no-alpha" id="colorInput" name="colorInput" value="#FFFFFF">
+          <input type="text" class="form-control color no-alpha" id="colorInput" name="color_input" value="#FFFFFF">
         </div>
         <div class="form-group">
           <label for="percentInput">Scale in Percent</label>
-          <input type="number" class="form-control" id="percentInput" name="percentInput" value="100" min="25" max="300" step="25">
+          <input type="number" class="form-control" id="percentInput" name="percent_input" value="100" min="25" max="300" step="25">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
