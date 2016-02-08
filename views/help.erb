@@ -1,11 +1,63 @@
-<p>
-  The URL parameters are constructed as <strong>/:rapper/:width/:height/:color/:percent/</strong>
-  <ul>
-    <li>the options for rapper are ice_cube, ice_t, and vanilla_ice</li>
-    <li>the options for width and height include any valid positive integer below 2560</li>
-    <li>the options for color include any valid hex web color without the pound sign in front of it</li>
-    <li>the options for percent include any positive integers up to 300</li>
-  </ul>
-  An example of a valid URL is <a href="/vanilla_ice/1024/768/ffc0cb/" title="example link">/vanilla_ice/1024/768/ffc0cb/</a> which returns a 1024 by 768 picture of Vanilla Ice in front of a pink background.
-</p>
-<p>Notes: the trailing slash is optional</p>
+<div class="col-md-6">
+  <h4>1) Use the Image Form</h4>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <p>Alternately, you can also use this convenient form to set the options and return a picture:</p>
+      <form>
+        <div class="form-group">
+          <label for="imageInput">Image</label>
+          <select class="form-control" id="imageInput" name="imageInput">
+            <option value="vanilla_ice">Vanilla Ice</option>
+            <option value="ice_cube">Ice Cube</option>
+            <option value="ice_t">Ice T</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="widthInput">Width in Pixels</label>
+          <input type="number" class="form-control" id="widthInput" name="widthInput" value="1024" min="16" max="2560">
+        </div>
+        <div class="form-group">
+          <label for="heightInput">Height in Pixels</label>
+          <input type="number" class="form-control" id="heightInput" name="heightInput" value="768" min="16" max="2560">
+        </div>
+        <div class="form-group">
+          <label for="colorInput">Background Color</label>
+          <input type="text" class="form-control color no-alpha" id="colorInput" name="colorInput" value="#FFFFFF">
+        </div>
+        <div class="form-group">
+          <label for="percentInput">Scale in Percent</label>
+          <input type="number" class="form-control" id="percentInput" name="percentInput" value="100" min="25" max="300" step="25">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6">
+  <h4>2) Use the URL API</h4>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <p>An example of a valid image URL would be</p>
+      <p><a href="/vanilla_ice/800/600/ffc0cb/" title="example link">/vanilla_ice/800/600/ffc0cb/</a></p>
+      <p>This link returns an 800 px by 600 px picture of Vanilla Ice with a solid pink background color.</p>
+      <p>The URL parameters are parsed in order to customize your image as follows:</p>
+      <p><strong>/:image/:width/:height/:color/:scale/</strong></p>
+      <dl>
+        <dt>Image</dt><dd>The options for images are <code>ice_cube</code>, <code>ice_t</code>, and <code>vanilla_ice</code>; the default is <code>vanilla_ice</code></dd>
+        <dt>Width & Height</dt><dd>The options for width and height in pixels include any positive integer between <code>16</code> and <code>2560</code>; the default dimensions are <code>1024</code> and <code>768</code></dd>
+        <dt>Color</dt><dd>The options for color include any valid hex web color without the pound sign in front of it; <code>ffffff</code> is the default</dd>
+        <dt>Scale</dt><dd>The options for percent include any positive integer from <code>25</code> to <code>300</code>; the default is <code>100</code></dd>
+      </dl>
+    </div>
+    <div class="panel-footer">
+      Note:
+      <ul>
+        <li>parameters can be optionally from last to first</li>
+        <li>any omitted values will assume their defaults</li>
+        <li>the trailing slash at the end of the URL is optional</li>
+      </ul>
+    </div>
+  </div>
+  </p>
+</div>
