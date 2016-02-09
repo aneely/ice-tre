@@ -22,8 +22,8 @@ helpers do
     percentage > 0
   end
 
-  def assign_rapper_image(rapper, default)
-    image_file = "image/#{rapper}.png"
+  def assign_image(file_name, default)
+    image_file = "image/#{file_name}.png"
 
     if File.file?(image_file)
       MiniMagick::Image.open(image_file)
@@ -32,8 +32,8 @@ helpers do
     end
   end
 
-  def assign_dimension(value, default)
-    sanitized_dimension = value.to_i
+  def assign_dimension(dimension, default)
+    sanitized_dimension = dimension.to_i
 
     if valid_dimension?(sanitized_dimension)
       sanitized_dimension
@@ -81,13 +81,15 @@ helpers do
     image.quality(90)
   end
 
+  def image_file_names
+    file_paths = Dir['image/*']
+    file_paths.each { |file_path| file_path.gsub!('image/', '').gsub!('.png', '') }
+  end
+
   def options_for_image_select
     select_hash = {}
 
-    file_paths = Dir['image/*']
-    image_names = file_paths.each { |file_path| file_path.gsub!('image/', '').gsub!('.png', '') }
-
-    image_names.each do |file|
+    image_file_names.each do |file|
       select_hash[file] = file.split('_').map { |name| name.capitalize }.join(' ')
     end
 
@@ -99,7 +101,10 @@ end
 
 get '/help/?' do
   @image_select_hash = options_for_image_select
-  @example_image = {file: @image_select_hash.keys.last, name:@image_select_hash.values.last}
+  @example_image = {
+      file: @image_select_hash.keys.last,
+      name: @image_select_hash.values.last
+  }
 
   erb :help
 end
@@ -118,8 +123,10 @@ post '/image' do
   redirect("/#{image}/#{width}/#{height}/#{color}/#{percent}/")
 end
 
-get '/?:rapper?/?:width?/?:height?/?:color?/?:percent?/?' do
-  image   = assign_rapper_image("#{params[:rapper]}", 'vanilla_ice')
+get '/?:image?/?:width?/?:height?/?:color?/?:percent?/?' do
+  random_image_name = image_file_names.sample
+
+  image   = assign_image("#{params[:image]}", random_image_name)
   width   = assign_dimension("#{params[:width]}", 1024)
   height  = assign_dimension("#{params[:height]}", 768)
   color   = assign_color("#{params[:color]}", 'ffffff')
@@ -131,7 +138,7 @@ get '/?:rapper?/?:width?/?:height?/?:color?/?:percent?/?' do
 
     image.to_blob
   else
-    redirect('/vanilla_ice/1024/768/ffffff/')
+    redirect("/#{random_image_name}/1024/768/ffffff/")
   end
 end
 
