@@ -85,7 +85,7 @@ helpers do
     select_hash = {}
 
     file_paths = Dir['image/*']
-    image_names = file_paths.each { |file| file.gsub!('image/', '').gsub!('.png', '') }
+    image_names = file_paths.each { |file_path| file_path.gsub!('image/', '').gsub!('.png', '') }
 
     image_names.each do |file|
       select_hash[file] = file.split('_').map { |name| name.capitalize }.join(' ')
@@ -99,6 +99,7 @@ end
 
 get '/help/?' do
   @image_select_hash = options_for_image_select
+  @example_image = {file: @image_select_hash.keys.last, name:@image_select_hash.values.last}
 
   erb :help
 end

@@ -1,8 +1,11 @@
 <div class="col-md-6">
-  <h4>1) Use the Image Form</h4>
+  <h3>Use the Image Form</h3>
+
   <div class="panel panel-default">
     <div class="panel-body">
-      <p>Alternately, you can also use this convenient form to set the options and return a picture:</p>
+      <h4>Click Your Way to Success</h4>
+
+      <p>You can also use this convenient form to set the options and return a picture:</p>
       <form action="/image" method="post">
         <div class="form-group">
           <label for="imageInput">Image</label>
@@ -37,54 +40,83 @@
 </div>
 
 <div class="col-md-6">
-  <h4>2) Use the URL API</h4>
+  <h3>Use the URL API</h3>
+
   <div class="panel panel-default">
     <div class="panel-body">
+
+      <h4>URL Quick Start</h4>
+
       <p>An example of a valid image URL would be</p>
-      <p><a href="/vanilla_ice/800/600/ffc0cb/" title="example link">/vanilla_ice/800/600/ffc0cb/</a></p>
-      <p>This link returns an 800 px by 600 px picture of Vanilla Ice with a solid pink background color.</p>
+      <div class="well well-sm"><a href="/<%= @example_image[:file]%>/800/600/ffc0cb/" title="example link">/<%= @example_image[:file]%>/800/600/ffc0cb/</a></div>
+      <p>This link returns an 800x600 pixel image of <%= @example_image[:name]%> with a solid pink background color.</p>
+
+      <hr>
+
+      <h4>URL Parameters</h4>
+
       <p>The URL parameters are parsed in order to customize your image as follows:</p>
-      <p><strong>/:image/:width/:height/:color/:scale/</strong></p>
-      <dl>
+      <div class="well well-sm"><strong>/:image/:width/:height/:color/:scale/</strong></div>
+
+      <hr>
+
+      <h4>Valid Parameter Values</h4>
+
+      <p>Valid values for the URL parameters are listed below</p>
+      <dl class="padded-dl">
         <dt>Image</dt>
         <dd>
-          The options for images are:
           <ul>
             <% if @image_select_hash %>
               <% @image_select_hash.each do |file, name| %>
                 <li><code><%= file %></code></li>
               <% end %>
             <% end %>
-            <!--<code>ice_cube</code>, <code>ice_t</code>, and <code>vanilla_ice</code>;-->
           </ul>
-          The default is <code>vanilla_ice</code>
         </dd>
         <dt>Width & Height</dt>
         <dd>
-          The options for width and height in pixels include any positive
-          integer between <code>16</code> and <code>2560</code>; the default
-          dimensions are <code>1024</code> and <code>768</code>
+          Any positive integer between <code>16</code> and <code>2560</code>
         </dd>
         <dt>Color</dt>
         <dd>
-          The options for color include any valid hex web color without the
-          pound sign in front of it; <code>ffffff</code> is the default
+          Any valid hex web color without the pound sign in front of it
         </dd>
         <dt>Scale</dt>
         <dd>
-          The options for percent include any positive integer from
-          <code>25</code> to <code>300</code>; the default is <code>100</code>
+          Any positive integer from <code>25</code> to <code>300</code>; the default is <code>100</code>
         </dd>
       </dl>
-    </div>
-    <div class="panel-footer">
-      Note:
+
+      <hr>
+
+      <h4>Optional Values</h4>
+
       <ul>
-        <li>parameters can be optionally omitted from last to first</li>
-        <li>any omitted values will assume their defaults</li>
+        <li>parameters are parsed in order from first to last</li>
+        <li>all parameters can be omitted in order from last to first</li>
+        <li>omitted parameters will assume their default values</li>
         <li>the trailing slash at the end of the URL is optional</li>
       </ul>
+
+      <hr>
+
+      <h4>Default Values</h4>
+
+      <dl class="dl-horizontal">
+        <dt>Image</dt>
+        <dd>a randomly chosen image</dd>
+        <dt>Width</dt>
+        <dd><code>1024</code></dd>
+        <dt>Height</dt>
+        <dd><code>768</code></dd>
+        <dt>Color</dt>
+        <dd><code>ffffff</code></dd>
+        <dt>Scale</dt>
+        <dd><code>100</code></dd>
+      </dl>
     </div>
   </div>
-  </p>
+
+  </div>
 </div>
