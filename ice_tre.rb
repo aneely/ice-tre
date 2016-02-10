@@ -5,56 +5,55 @@ require 'mini_magick'
 require 'pry'
 
 helpers do
-  def valid_width_and_height?(width, height)
-    width > 0 && height > 0
-  end
-
-  def valid_dimension?(value)
-    value > 0
-  end
-
   def valid_hex_color?(color)
-    match = color.match(/^#([0-9a-fA-F]{3}){1,2}$/)
+    match = color.match(/^#([0-9a-fA-F]{6}){1,2}$/)
+
     match.to_s.length > 0
   end
 
-  def valid_non_zero_percentage?(percentage)
-    percentage > 0
-  end
-
-  def assign_image(file_name, default)
+  def assign_image(file_name)
     image_file = "image/#{file_name}.png"
 
     if File.file?(image_file)
       MiniMagick::Image.open(image_file)
     else
-      MiniMagick::Image.open("image/#{default}.png")
+      MiniMagick::Image.open("image/#{random_image_name}.png")
     end
   end
 
-  def assign_dimension(dimension, default)
-    sanitized_dimension = dimension.to_i
+  def assign_width(width)
+    assign_dimension(width,1024)
+  end
 
-    if valid_dimension?(sanitized_dimension)
-      sanitized_dimension
+  def assign_height(height)
+    assign_dimension(height,768)
+  end
+  
+  def assign_dimension(dimension, default)
+    sanitized = dimension.to_i
+
+    if sanitized > 0
+      [[2560, sanitized].min, 16].max
     else
       default
     end
   end
 
-  def assign_color(color, default)
+  def assign_color(color)
     if valid_hex_color?("##{color}")
       "##{color}"
     else
-      "##{default}"
+      '#ffffff'
     end
   end
 
   def assign_percent(percent)
-    if valid_non_zero_percentage?(percent.to_i)
-      percent.to_i
+    sanitized = percent.to_i
+
+    if sanitized > 0
+      [[300, sanitized].min, 10].max
     else
-      false
+      100
     end
   end
 
@@ -101,13 +100,12 @@ helpers do
   end
 
   def response_image(image_name, width, height, color, percent)
-    random_image_name = image_file_names.sample
 
-    image = assign_image("#{image_name}", random_image_name)
-    width = assign_dimension("#{width}", 1024)
-    height = assign_dimension("#{height}", 768)
-    color = assign_color("#{color}", 'ffffff')
-    percent = assign_percent("#{percent}") || 100
+    image   = assign_image("#{image_name}")
+    width   = assign_width("#{width}")
+    height  = assign_height("#{height}")
+    color   = assign_color("#{color}")
+    percent = assign_percent("#{percent}")
 
     format_image(image, width, height, color, percent)
     content_type 'image/jpg'
@@ -143,19 +141,19 @@ end
 
 get /^\/(\d+)\/(\d+)\/([a-fA-F0-9]{6}){1,2}\b\/(\d+)\/*/ do |width, height, hex_color, percent|
 
-  redirect("/#{random_image_name}/#{width}/#{height}/#{hex_color}/#{percent}/")
+  response_image(nil, width, height,hex_color, percent)
 
 end
 
 get /^\/(\d+)\/(\d+)\/([a-fA-F0-9]{6}){1,2}\b\/*/ do |width, height, hex_color|
 
-  redirect("/#{random_image_name}/#{width}/#{height}/#{hex_color}/")
+  response_image(nil, width, height, hex_color, nil)
 
 end
 
 get /^\/(\d+)\/(\d+)\/*/ do |width, height|
 
-  redirect("/#{random_image_name}/#{width}/#{height}/ffffff/")
+  response_image(nil, width, height, nil, nil)
 
 end
 
