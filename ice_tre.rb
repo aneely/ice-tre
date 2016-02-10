@@ -99,7 +99,7 @@ end
 
 # defined route methods
 
-get '/help/?' do
+get '/' do
   @image_select_hash = options_for_image_select
   @example_image = {
       file: @image_select_hash.keys.last,
@@ -121,6 +121,24 @@ post '/image' do
   end
 
   redirect("/#{image}/#{width}/#{height}/#{color}/#{percent}/")
+end
+
+get /^\/(\d+)\/(\d+)\/([a-fA-F0-9]{6}){1,2}\b\/(\d+)\/*/ do |width, height, hex_color, percent|
+  random_image_name = image_file_names.sample
+
+  redirect("/#{random_image_name}/#{width}/#{height}/#{hex_color}/#{percent}/")
+end
+
+get /^\/(\d+)\/(\d+)\/([a-fA-F0-9]{6}){1,2}\b\/*/ do |width, height, hex_color|
+  random_image_name = image_file_names.sample
+
+  redirect("/#{random_image_name}/#{width}/#{height}/#{hex_color}/")
+end
+
+get /^\/(\d+)\/(\d+)\/*/ do |width, height|
+  random_image_name = image_file_names.sample
+
+  redirect("/#{random_image_name}/#{width}/#{height}/ffffff/")
 end
 
 get '/?:image?/?:width?/?:height?/?:color?/?:percent?/?' do
