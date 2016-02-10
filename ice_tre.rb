@@ -150,14 +150,9 @@ get '/?:image?/?:width?/?:height?/?:color?/?:percent?/?' do
   color   = assign_color("#{params[:color]}", 'ffffff')
   percent = assign_percent("#{params[:percent]}") || 100
 
-  if image and valid_width_and_height?(height, width) and valid_hex_color?(color)
-    format_image(image, width, height, color, percent)
-    content_type 'image/jpg'
-
-    image.to_blob
-  else
-    redirect("/#{random_image_name}/1024/768/ffffff/")
-  end
+  format_image(image, width, height, color, percent)
+  content_type 'image/jpg'
+  image.to_blob
 end
 
 # route methods for undefined API requests
