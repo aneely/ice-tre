@@ -86,6 +86,10 @@ helpers do
     file_paths.each { |file_path| file_path.gsub!('image/', '').gsub!('.png', '') }
   end
 
+  def random_image_name
+    image_file_names.sample
+  end
+
   def options_for_image_select
     select_hash = {}
 
@@ -94,6 +98,20 @@ helpers do
     end
 
     select_hash
+  end
+
+  def response_image(image_name, width, height, color, percent)
+    random_image_name = image_file_names.sample
+
+    image = assign_image("#{image_name}", random_image_name)
+    width = assign_dimension("#{width}", 1024)
+    height = assign_dimension("#{height}", 768)
+    color = assign_color("#{color}", 'ffffff')
+    percent = assign_percent("#{percent}") || 100
+
+    format_image(image, width, height, color, percent)
+    content_type 'image/jpg'
+    image.to_blob
   end
 end
 
@@ -124,35 +142,27 @@ post '/image' do
 end
 
 get /^\/(\d+)\/(\d+)\/([a-fA-F0-9]{6}){1,2}\b\/(\d+)\/*/ do |width, height, hex_color, percent|
-  random_image_name = image_file_names.sample
 
   redirect("/#{random_image_name}/#{width}/#{height}/#{hex_color}/#{percent}/")
+
 end
 
 get /^\/(\d+)\/(\d+)\/([a-fA-F0-9]{6}){1,2}\b\/*/ do |width, height, hex_color|
-  random_image_name = image_file_names.sample
 
   redirect("/#{random_image_name}/#{width}/#{height}/#{hex_color}/")
+
 end
 
 get /^\/(\d+)\/(\d+)\/*/ do |width, height|
-  random_image_name = image_file_names.sample
 
   redirect("/#{random_image_name}/#{width}/#{height}/ffffff/")
+
 end
 
 get '/?:image?/?:width?/?:height?/?:color?/?:percent?/?' do
-  random_image_name = image_file_names.sample
 
-  image   = assign_image("#{params[:image]}", random_image_name)
-  width   = assign_dimension("#{params[:width]}", 1024)
-  height  = assign_dimension("#{params[:height]}", 768)
-  color   = assign_color("#{params[:color]}", 'ffffff')
-  percent = assign_percent("#{params[:percent]}") || 100
+  response_image(params[:image], params[:width], params[:height], params[:color], params[:percent])
 
-  format_image(image, width, height, color, percent)
-  content_type 'image/jpg'
-  image.to_blob
 end
 
 # route methods for undefined API requests
