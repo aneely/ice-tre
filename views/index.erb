@@ -47,9 +47,21 @@
 
       <h4>URL Quick Start</h4>
 
-      <p>An example of a valid image URL would be</p>
+      <p>There are two patterns you can use to build out an image from the URL, one with a named image and one without.</p>
+
+      <p>An example of a valid image URL with a named image would be:</p>
       <div class="well well-sm"><a href="/<%= @example_image[:file]%>/800/600/ffc0cb/" title="example link">/<%= @example_image[:file]%>/800/600/ffc0cb/</a></div>
-      <p>This link returns an 800x600 pixel image of <%= @example_image[:name]%> with a solid pink background color.</p>
+      <p>This link returns an 800x600 pixel image of <%= @example_image[:name]%> with a solid pink background color. You can find a list of valid parameters <a href="#parameter-values" title="values link">below</a>.</p>
+
+      <p>Another example of a valid URL without one would be:</p>
+      <div class="well well-sm"><a href="/640/480" title="example link">/640/480</a></div>
+      <p>This link returns a randomly chosen 640x480 pixel with a white background color.</p>
+
+      <hr>
+
+      <p>Yet another valid URL would be:</p>
+      <div class="well well-sm"><a href="/640/480/000000/200/" title="example link">/640/480/000000/200/</a></div>
+      <p>This link returns a randomly chosen 1280x960 pixel with a black background color. This could be sized to 50% to create a retina-friendly image</p>
 
       <hr>
 
@@ -57,10 +69,12 @@
 
       <p>The URL parameters are parsed in order to customize your image as follows:</p>
       <div class="well well-sm"><strong>/:image/:width/:height/:color/:scale/</strong></div>
+      <p>or</p>
+      <div class="well well-sm"><strong>/:width/:height/:color/:scale/</strong></div>
 
       <hr>
 
-      <h4>Valid Parameter Values</h4>
+      <h4 id="parameter-values">Valid Parameter Values</h4>
 
       <p>Valid values for the URL parameters are listed below</p>
       <dl class="padded-dl">
@@ -94,7 +108,7 @@
 
       <ul>
         <li>parameters are parsed in order from first to last</li>
-        <li>all parameters can be omitted in order from last to first</li>
+        <li>all parameters but the first can be omitted in reverse order</li>
         <li>omitted parameters will assume their default values</li>
         <li>the trailing slash at the end of the URL is optional</li>
       </ul>

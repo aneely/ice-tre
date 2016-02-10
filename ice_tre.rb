@@ -106,7 +106,7 @@ get '/' do
       name: @image_select_hash.values.last
   }
 
-  erb :help
+  erb :index
 end
 
 post '/image' do
