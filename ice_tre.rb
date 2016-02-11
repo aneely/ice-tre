@@ -100,6 +100,7 @@ helpers do
   end
 
   def response_image(image_name, width, height, color, percent)
+    image_name = params[:image] if image_name.nil?
 
     image   = assign_image("#{image_name}")
     width   = assign_width("#{width}")
