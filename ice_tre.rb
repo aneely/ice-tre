@@ -12,12 +12,12 @@ helpers do
   end
 
   def assign_image(file_name)
-    image_file = "image/#{file_name}.png"
+    image_file = "images/#{file_name}.png"
 
     if File.file?(image_file)
       MiniMagick::Image.open(image_file)
     else
-      MiniMagick::Image.open("image/#{random_image_name}.png")
+      MiniMagick::Image.open("images/#{random_image_name}.png")
     end
   end
 
@@ -81,8 +81,8 @@ helpers do
   end
 
   def image_file_names
-    file_paths = Dir['image/*']
-    file_paths.each { |file_path| file_path.gsub!('image/', '').gsub!('.png', '') }
+    file_paths = Dir['images/*']
+    file_paths.each { |file_path| file_path.gsub!('images/', '').gsub!('.png', '') }
   end
 
   def random_image_name
@@ -125,7 +125,7 @@ get '/' do
   erb :index
 end
 
-post '/image' do
+post '/images' do
   image   = params[:image_input]
   width   = params[:width_input]
   height  = params[:height_input]
@@ -159,7 +159,7 @@ end
 
 get '/?:image?/?:width?/?:height?/?:color?/?:percent?/?' do
 
-  response_image(params[:image], params[:width], params[:height], params[:color], params[:percent])
+  response_image(params[:images], params[:width], params[:height], params[:color], params[:percent])
 
 end
 
