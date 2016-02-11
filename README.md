@@ -1,6 +1,6 @@
 # README #
 
-This README is for detailing how to play with Ice Tré, the image placement engine at [RappersOnThe.Rocks](http://www.rappersonthe.rocks/).
+This README is for detailing how to play with Ice Tré, the app powering the image placement engine at [RappersOnThe.Rocks](http://www.rappersonthe.rocks/).
 
 ### Quick start ###
 
