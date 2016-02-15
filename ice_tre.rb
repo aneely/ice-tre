@@ -100,8 +100,6 @@ helpers do
   end
 
   def response_image(image_name, width, height, color, percent)
-    image_name = params[:image] if image_name.nil?
-
     image   = assign_image("#{image_name}")
     width   = assign_width("#{width}")
     height  = assign_height("#{height}")
@@ -160,7 +158,7 @@ end
 
 get '/?:image?/?:width?/?:height?/?:color?/?:percent?/?' do
 
-  response_image(params[:images], params[:width], params[:height], params[:color], params[:percent])
+  response_image(params[:image], params[:width], params[:height], params[:color], params[:percent])
 
 end
 
