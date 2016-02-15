@@ -1,6 +1,6 @@
 # README #
 
-This README is for detailing how to play with Ice Tré, the image placement engine at [RappersOnThe.Rocks](http://www.rappersonthe.rocks/).
+This README is for detailing how to play with Ice Tré, the app powering the image placement engine at [RappersOnThe.Rocks](http://www.rappersonthe.rocks/).
 
 ### Quick start ###
 
@@ -10,7 +10,7 @@ If you don't have [Image Magick](http://www.imagemagick.org/) installed, you'll 
 
 From the project directory, run 'ruby ice_tre.rb' and go to localhost:4567 in your browser to see it.
 
-If everything worked, you should be staring at a picture of Vanilla Ice holding two American Music Awards from a very dark time in our culture's history.
+If everything worked, you should see a page with a detailed explanation of how the URL scheme works and a form to play with different URL values to configure the image returned. Select 'Vanilla Ice', for example, to find yourself staring at a picture of Vanilla Ice holding two American Music Awards from a very dark time in our culture's history.
 
 ### How do I use it? ###
 
